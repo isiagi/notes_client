@@ -29,7 +29,7 @@ const Login = () => {
       console.log(error);
       error.code === "ERR_NETWORK"
         ? info(error.message)
-        : info(error.response.data.message);
+        : info(JSON.stringify(error.response.data));
     }
   };
 
