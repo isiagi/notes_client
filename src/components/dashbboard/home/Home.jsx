@@ -55,8 +55,9 @@ function Home() {
       console.log(`Clicked on ${menuItem}`);
       if (menuItem.key === "1") {
         // setIsModalOpen(true);
+        console.log("hello");
       } else if (menuItem.key === "2") {
-        alert("You clicked the 2nd menu item: World");
+        console.log("van");
       }
     }
   };
