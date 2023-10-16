@@ -64,7 +64,10 @@ function Home() {
 
   const menuProps = {
     items,
-    onClick: handleMenuClick,
+    onClick: ({ key }) => {
+      const menuItem = items.find((item) => item.key === key);
+      handleMenuClick(menuItem);
+    },
   };
 
   return (
