@@ -1,12 +1,9 @@
-import { useState } from "react";
-import { Button, Modal } from "antd";
+import { useContext } from "react";
+import { Modal } from "antd";
+import { ModalContext } from "../../context/Context";
 
 function ViewModal() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
+  const { isModalOpen, setIsModalOpen } = useContext(ModalContext);
 
   const handleOk = () => {
     setIsModalOpen(false);
@@ -17,9 +14,6 @@ function ViewModal() {
   };
   return (
     <>
-      <Button type="primary" onClick={showModal}>
-        Open Modal
-      </Button>
       <Modal
         title="Basic Modal"
         open={isModalOpen}

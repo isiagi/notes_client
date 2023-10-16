@@ -8,43 +8,31 @@ import {
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import instance from "../../../api";
+// import { ModalContext } from "../../../context/Context";
+import ViewModal from "../../viewModal/ViewModal";
 
 const items = [
   {
     key: "1",
-    label: (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://www.antgroup.com"
-      >
-        View
-      </a>
-    ),
+    label: "View",
     icon: <SnippetsOutlined />,
   },
   {
     key: "2",
-    label: <p>Edit</p>,
+    label: "Edit",
     icon: <ControlOutlined />,
   },
   {
     key: "3",
-    label: (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://www.luohanacademy.com"
-      >
-        Delete
-      </a>
-    ),
+    label: "Delete",
     icon: <DeleteOutlined />,
   },
 ];
 
 function Home() {
   const [noteData, setnoteData] = useState([]);
+  // const { isModalOpen, setIsModalOpen } = useContext(ModalContext);
+
   const token = localStorage.getItem("notesToken");
   useEffect(() => {
     const fetchNote = async () => {
@@ -62,6 +50,22 @@ function Home() {
     fetchNote();
   }, []);
 
+  const handleMenuClick = (menuItem) => {
+    if (menuItem) {
+      console.log(`Clicked on ${menuItem}`);
+      if (menuItem.key === "1") {
+        // setIsModalOpen(true);
+      } else if (menuItem.key === "2") {
+        alert("You clicked the 2nd menu item: World");
+      }
+    }
+  };
+
+  const menuProps = {
+    items,
+    onClick: handleMenuClick,
+  };
+
   return (
     <div>
       <h4>Your Notes</h4>
@@ -72,14 +76,10 @@ function Home() {
               <div key={id} className="bg-violet-400 md:p-4 p-3">
                 <div className="flex justify-between">
                   <BookOutlined />
-                  <Dropdown
-                    menu={{
-                      items,
-                    }}
-                    placement="bottomRight"
-                  >
+                  <Dropdown menu={menuProps} placement="bottomRight">
                     <MoreOutlined rotate={90} />
                   </Dropdown>
+                  <ViewModal />
                 </div>
                 <h4>{title}</h4>
                 <div>
