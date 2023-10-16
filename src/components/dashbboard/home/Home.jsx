@@ -6,9 +6,9 @@ import {
   DeleteOutlined,
   ControlOutlined,
 } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import instance from "../../../api";
-// import { ModalContext } from "../../../context/Context";
+import { ModalContext } from "../../../context/Context";
 import ViewModal from "../../viewModal/ViewModal";
 
 const items = [
@@ -31,7 +31,7 @@ const items = [
 
 function Home() {
   const [noteData, setnoteData] = useState([]);
-  // const { isModalOpen, setIsModalOpen } = useContext(ModalContext);
+  const { setIsModalOpen } = useContext(ModalContext);
 
   const token = localStorage.getItem("notesToken");
   useEffect(() => {
@@ -54,7 +54,7 @@ function Home() {
     if (menuItem) {
       console.log(`Clicked on ${menuItem}`);
       if (menuItem.key === "1") {
-        // setIsModalOpen(true);
+        setIsModalOpen(true);
         console.log("hello");
       } else if (menuItem.key === "2") {
         console.log("van");
