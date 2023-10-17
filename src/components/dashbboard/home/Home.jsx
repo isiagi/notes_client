@@ -5,11 +5,13 @@ import {
   SnippetsOutlined,
   DeleteOutlined,
   ControlOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
 import { useContext, useEffect, useState } from "react";
 import instance from "../../../api";
 import { ModalContext } from "../../../context/Context";
 import ViewModal from "../../viewModal/ViewModal";
+import { Link } from "react-router-dom";
 
 const items = [
   {
@@ -40,6 +42,7 @@ function Home() {
         const response = await instance.get("/notes", {
           headers: { Authorization: `Token ${token}` },
         });
+        console.log(response);
         setnoteData(response.data);
       } catch (error) {
         console.log(error);
@@ -59,6 +62,17 @@ function Home() {
       } else if (menuItem.key === "2") {
         console.log("van");
       }
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await instance.delete(`/notes/${id}`, {
+        headers: { Authorization: `Token ${token}` },
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -91,6 +105,10 @@ function Home() {
                   <Tag color="success">{category}</Tag>
                   <Tag color="success">{priority}</Tag>
                 </div>
+                <DeleteOutlined onClick={() => handleDelete(id)} />
+                <Link to={`/home/edit-note/${id}`}>
+                  <EditOutlined />
+                </Link>
               </div>
             ))}
       </div>

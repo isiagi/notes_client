@@ -44,14 +44,19 @@ const App = () => {
                 label: <Link to="/home">Home</Link>,
               },
               {
+                key: "4",
+                icon: <VideoCameraOutlined />,
+                label: <Link to="/home/create-notes">Create Note</Link>,
+              },
+              {
                 key: "2",
                 icon: <VideoCameraOutlined />,
-                label: "Publish Note",
+                label: <Link to="/home/publish-notes">Publish Note</Link>,
               },
               {
                 key: "3",
                 icon: <UploadOutlined />,
-                label: "Export",
+                label: <Link to="/home/export-notes">Export Note</Link>,
               },
             ]}
           />
