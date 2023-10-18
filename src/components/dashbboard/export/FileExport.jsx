@@ -1,37 +1,9 @@
-import { useState } from "react";
+/* eslint-disable react/prop-types */
 import { Button } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import PDFViewer from "./PdfViewer"; // Import the PDFViewer component
-import { fileGenerationApi } from "../../../api/notes";
 
-function FileExport() {
-  const [pdfData, setPdfData] = useState(null);
-
-  const handleExport = async (fileType, urlExtension) => {
-    try {
-      const responseType = fileType === "pdf" ? "arraybuffer" : "blob";
-
-      const response = await fileGenerationApi(urlExtension, responseType);
-
-      if (fileType === "pdf") {
-        setPdfData(response.data); // Store the binary PDF data
-      } else {
-        // For CSV and Excel, trigger a file download
-        const blob = new Blob([response.data], {
-          type: `application/${fileType}`,
-        });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = `Notes.${fileType}`;
-        link.click();
-        URL.revokeObjectURL(url);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+function FileExport({ handleExport, pdfData }) {
   return (
     <div>
       <h2>Choose File Format To Download</h2>

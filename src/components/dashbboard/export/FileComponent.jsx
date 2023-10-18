@@ -31,7 +31,7 @@ function FileComponent() {
   };
   return (
     <div>
-      <FileExportz handleExportFx={handleExportFx} pdfData={pdfData} />;
+      <FileExportz handleExport={handleExportFx} pdfData={pdfData} />
     </div>
   );
 }
