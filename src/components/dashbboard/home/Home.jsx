@@ -62,7 +62,7 @@ function Home() {
     <div>
       <h4>Your Notes</h4>
       <div className="grid md:grid-cols-fluid grid-cols-flud gap-6">
-        {noteData.length === 0
+        {noteData?.length === 0
           ? "No Notes Found"
           : noteData?.map(({ category, description, title, priority, id }) => (
               <div

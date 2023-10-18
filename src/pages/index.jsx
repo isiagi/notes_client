@@ -11,6 +11,7 @@ import Publish from "../components/dashbboard/publish/Publish";
 import CreateNote from "../components/dashbboard/create/CreateNote";
 import EditNote from "../components/dashbboard/edit/EditNote";
 import FileComponent from "../components/dashbboard/export/FileComponent";
+import HomePage from "../components/home/HomePage";
 
 function index() {
   const tokenStatus = localStorage.getItem("notesToken") ? true : false;
@@ -19,6 +20,7 @@ function index() {
     <Router>
       <Nav />
       <Routes>
+        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route element={<ProtectRoutes token={tokenStatus} />}>

@@ -1,18 +1,38 @@
 import { Typography } from "antd";
 import { Link } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
+import { logoutApi } from "../api/auth";
+import { useNavigate } from "react-router-dom";
 
 const { Text } = Typography;
 
 function Nav() {
   const authToken = localStorage.getItem("notesToken") ? true : false;
+  const history = useNavigate();
+
+  const handleLogOut = async () => {
+    try {
+      const res = await logoutApi("/auth/logout");
+
+      if (res.statusText === "OK") {
+        localStorage.removeItem("notesToken");
+        console.log(res);
+        history("login");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <nav className="flex justify-between items-center bg-[#0F4C81] h-[10vh] px-6 fixed w-full z-10">
       <Text className="text-xl text-white font-semibold">JotBox</Text>
       <section className="flex gap-3 items-center">
         <Text className="text-base text-white font-semibold">Home</Text>
         {authToken ? (
-          <div className="flex gap-1 items-center">
+          <div
+            className="flex gap-1 items-center cursor-pointer"
+            onClick={handleLogOut}
+          >
             <UserOutlined className="text-white" />
             <Text className="text-base text-white font-semibold">Logout</Text>
           </div>
