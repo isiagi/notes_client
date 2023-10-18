@@ -1,22 +1,17 @@
 import { useState } from "react";
 import { Button } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
-import instance from "../../../api";
 import PDFViewer from "./PdfViewer"; // Import the PDFViewer component
+import { fileGenerationApi } from "../../../api/notes";
 
 function FileExport() {
   const [pdfData, setPdfData] = useState(null);
 
   const handleExport = async (fileType, urlExtension) => {
     try {
-      const token = localStorage.getItem("notesToken");
-
       const responseType = fileType === "pdf" ? "arraybuffer" : "blob";
 
-      const response = await instance.get(`/notes/generate_${urlExtension}`, {
-        headers: { Authorization: `Token ${token}` },
-        responseType, // Set responseType based on the file type
-      });
+      const response = await fileGenerationApi(urlExtension, responseType);
 
       if (fileType === "pdf") {
         setPdfData(response.data); // Store the binary PDF data

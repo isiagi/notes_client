@@ -1,23 +1,16 @@
 import { Button, Result } from "antd";
 import { DownloadOutlined, MailOutlined } from "@ant-design/icons";
-import instance from "../../../api";
 import { useState } from "react";
+import { publishApi } from "../../../api/notes";
 
 function Publish() {
   const [loading, setloading] = useState(false);
   const [sent, setSent] = useState("pending");
 
   const handlePublish = async () => {
-    const token = localStorage.getItem("notesToken");
     try {
       setloading(true);
-      const response = await instance.post(
-        "/notes/publish_pdf",
-        {},
-        {
-          headers: { Authorization: `Token ${token}` },
-        }
-      );
+      const response = await publishApi();
       console.log("---r---", response);
       response.statusText === "OK" && setSent("ok");
     } catch (error) {

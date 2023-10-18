@@ -1,8 +1,8 @@
 import { Button, DatePicker, Form, Input, Select, notification } from "antd";
 import moment from "moment";
-import instance from "../../../api";
 
 import { useNavigate } from "react-router-dom";
+import { createNoteApi } from "../../../api/notes";
 
 const layout = {
   labelCol: {
@@ -25,13 +25,12 @@ const CreateNote = () => {
 
   const onFinish = async (values) => {
     console.log("Received values of form: ", values);
-    const token = localStorage.getItem("notesToken");
 
     try {
       values["due_date"] = moment(values["due_date"]).format("YYYY-MM-DD");
-      const response = await instance.post("/notes/create", values, {
-        headers: { Authorization: `Token ${token}` },
-      });
+
+      const response = await createNoteApi(values);
+
       openNotification(
         "Creation Successful!",
         `New Note with Title ${response.data.title} has been created!`

@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 import { useContext } from "react";
 import { Modal } from "antd";
 import { ModalContext } from "../../context/Context";
 
-function ViewModal() {
+function ViewModal({ data }) {
   const { isModalOpen, setIsModalOpen } = useContext(ModalContext);
 
   const handleOk = () => {
@@ -15,14 +16,12 @@ function ViewModal() {
   return (
     <>
       <Modal
-        title="Basic Modal"
+        title={data[0]?.title}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <p>{data[0]?.description}</p>
       </Modal>
     </>
   );

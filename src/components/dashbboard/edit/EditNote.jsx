@@ -1,9 +1,8 @@
 import { Button, DatePicker, Form, Input, Select, notification } from "antd";
 import moment from "moment";
-import instance from "../../../api";
-
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { editNoteApi, getNoteByIdApi } from "../../../api/notes";
 
 const layout = {
   labelCol: {
@@ -21,12 +20,8 @@ const CreateNote = () => {
 
   useEffect(() => {
     const fetchNote = async () => {
-      const token = localStorage.getItem("notesToken");
       try {
-        const response = await instance.get(`/notes/${id}`, {
-          headers: { Authorization: `Token ${token}` },
-        });
-        console.log(response);
+        const response = await getNoteByIdApi(id);
         setnoteData(response.data);
       } catch (error) {
         console.log(error);
@@ -47,13 +42,10 @@ const CreateNote = () => {
 
   const onFinish = async (values) => {
     console.log("Received values of form: ", values);
-    const token = localStorage.getItem("notesToken");
 
     try {
       values["due_date"] = moment(values["due_date"]).format("YYYY-MM-DD");
-      const response = await instance.patch(`/notes/${id}`, values, {
-        headers: { Authorization: `Token ${token}` },
-      });
+      const response = await editNoteApi(id, values);
       openNotification(
         "Update Successful!",
         `New Note with Title ${response.data.title} has been Edited!`
