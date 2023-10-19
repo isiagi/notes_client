@@ -18,7 +18,7 @@ function Nav() {
       if (res.statusText === "OK") {
         localStorage.removeItem("notesToken");
         console.log(res);
-        history("login");
+        history("/login");
       }
     } catch (error) {
       console.log(error);
