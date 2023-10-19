@@ -1,15 +1,17 @@
 /* eslint-disable react/prop-types */
-import { Button } from "antd";
-import { DownloadOutlined } from "@ant-design/icons";
+import { Button, Result } from "antd";
+import { DownloadOutlined, CloudDownloadOutlined } from "@ant-design/icons";
 import PDFViewer from "./PdfViewer"; // Import the PDFViewer component
 
 function FileExport({ handleExport, pdfData }) {
   return (
     <div>
-      <h2>Choose File Format To Download</h2>
-      <div className="flex gap-5 mb-2">
+      <h2 className="text-lg text-[#10826E] mb-4">
+        Choose File Format To Download
+      </h2>
+      <div className="flex gap-5 mb-2 flex-wrap">
         <Button
-          className="bg-blue-500"
+          className="bg-blue-600"
           type="primary"
           icon={<DownloadOutlined />}
           size={"large"}
@@ -18,7 +20,7 @@ function FileExport({ handleExport, pdfData }) {
           View & Download PDF
         </Button>
         <Button
-          className="bg-blue-500"
+          className="bg-blue-600"
           type="primary"
           icon={<DownloadOutlined />}
           size={"large"}
@@ -27,7 +29,7 @@ function FileExport({ handleExport, pdfData }) {
           Download CSV
         </Button>
         <Button
-          className="bg-blue-500"
+          className="bg-blue-600"
           type="primary"
           icon={<DownloadOutlined />}
           size={"large"}
@@ -36,6 +38,14 @@ function FileExport({ handleExport, pdfData }) {
           Download Excel
         </Button>
       </div>
+      {!pdfData && (
+        <Result
+          status={"info"}
+          icon={<CloudDownloadOutlined />}
+          title="Use Bottons above to download files"
+          className="text-[#10826E]"
+        />
+      )}
       {pdfData && <PDFViewer responseData={pdfData} />}
     </div>
   );

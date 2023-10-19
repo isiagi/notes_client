@@ -21,6 +21,7 @@ const App = () => {
     <div className="pt-[10vh]">
       <Layout style={{ minHeight: "100vh" }}>
         <Sider
+          theme="light"
           trigger={null}
           collapsible
           collapsed={collapsed}
@@ -34,7 +35,7 @@ const App = () => {
         >
           <div className="demo-logo-vertical" />
           <Menu
-            theme="dark"
+            theme="light"
             mode="inline"
             defaultSelectedKeys={["1"]}
             items={[
@@ -45,7 +46,7 @@ const App = () => {
               },
               {
                 key: "4",
-                icon: <VideoCameraOutlined />,
+                icon: <VideoCameraOutlined className="text-blue-600" />,
                 label: <Link to="/home/create-notes">Create Note</Link>,
               },
               {
@@ -85,7 +86,8 @@ const App = () => {
               padding: 24,
               minHeight: 280,
               background: colorBgContainer,
-              overflow: "hidden",
+              overflowX: "hidden",
+              overflowY: "scroll",
             }}
           >
             <Outlet />

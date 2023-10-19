@@ -44,9 +44,9 @@ const CreateNote = () => {
     }
   };
   return (
-    <div className="grid place-items-center">
+    <div className="grid place-items-center h-full">
       {contextHolder}
-      <h2>Create A New Note</h2>
+      <h2 className="text-lg text-[#10826E]">Create A New Note</h2>
       <Form
         {...layout}
         name="complex-form"

@@ -1,6 +1,5 @@
 import instance from ".";
-
-const token = localStorage.getItem("notesToken");
+import { fetchToken } from "./fetchToken";
 
 export const authApi = async (route, values) => {
   try {
@@ -22,6 +21,7 @@ export const resetPassword = async (route, values) => {
 
 export const logoutApi = async (route) => {
   try {
+    const token = await fetchToken();
     const res = await instance.get(`${route}`, {
       headers: { Authorization: `Token ${token}` },
     });

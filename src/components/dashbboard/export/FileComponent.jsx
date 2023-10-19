@@ -1,9 +1,39 @@
 import { useState } from "react";
-import { fileGenerationApi } from "../../../api/notes";
+import { fileGenerationApi, getNotesApi } from "../../../api/notes";
 import FileExportz from "./FileExport";
+import { Button, Result } from "antd";
+import { CloudDownloadOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
 function FileComponent() {
   const [pdfData, setPdfData] = useState(null);
+  const [noteData, setNoteData] = useState(true);
+
+  getNotesApi().then((response) => {
+    if (response.data.length === 0) {
+      setNoteData(false);
+    }
+  });
+
+  if (!noteData) {
+    return (
+      <>
+        <Result
+          status={"error"}
+          icon={<CloudDownloadOutlined />}
+          title="You Current have No notes"
+          className="text-[#10826E]"
+          extra={
+            <Link to="/home/create-notes">
+              <Button type="primary" className="bg-blue-600">
+                Create Note
+              </Button>
+            </Link>
+          }
+        />
+      </>
+    );
+  }
 
   const handleExportFx = async (fileType, urlExtension) => {
     try {
@@ -29,6 +59,7 @@ function FileComponent() {
       console.log(error);
     }
   };
+
   return (
     <div>
       <FileExportz handleExport={handleExportFx} pdfData={pdfData} />

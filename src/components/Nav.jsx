@@ -8,6 +8,7 @@ const { Text } = Typography;
 
 function Nav() {
   const authToken = localStorage.getItem("notesToken") ? true : false;
+
   const history = useNavigate();
 
   const handleLogOut = async () => {
@@ -25,9 +26,13 @@ function Nav() {
   };
   return (
     <nav className="flex justify-between items-center bg-[#0F4C81] h-[10vh] px-6 fixed w-full z-10">
-      <Text className="text-xl text-white font-semibold">JotBox</Text>
+      <Link to="/">
+        <Text className="text-xl text-white font-semibold">JotBox</Text>
+      </Link>
       <section className="flex gap-3 items-center">
-        <Text className="text-base text-white font-semibold">Home</Text>
+        <Link to="/home">
+          <Text className="text-base text-white font-semibold">Home</Text>
+        </Link>
         {authToken ? (
           <div
             className="flex gap-1 items-center cursor-pointer"

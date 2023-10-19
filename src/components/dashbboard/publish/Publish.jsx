@@ -1,11 +1,39 @@
 import { Button, Result } from "antd";
-import { DownloadOutlined, MailOutlined } from "@ant-design/icons";
+import { SendOutlined, MailOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { publishApi } from "../../../api/notes";
+import { getNotesApi, publishApi } from "../../../api/notes";
+import { Link } from "react-router-dom";
 
 function Publish() {
   const [loading, setloading] = useState(false);
   const [sent, setSent] = useState("pending");
+  const [noteData, setNoteData] = useState(true);
+
+  getNotesApi().then((response) => {
+    if (response.data.length === 0) {
+      setNoteData(false);
+    }
+  });
+
+  if (!noteData) {
+    return (
+      <>
+        <Result
+          status={"error"}
+          icon={<SendOutlined />}
+          title="You Current have No notes"
+          className="text-[#10826E]"
+          extra={
+            <Link to="/home/create-notes">
+              <Button type="primary" className="bg-blue-600">
+                Create Note
+              </Button>
+            </Link>
+          }
+        />
+      </>
+    );
+  }
 
   const handlePublish = async () => {
     try {
@@ -22,7 +50,9 @@ function Publish() {
   };
   return (
     <div>
-      <h2>Publish Your Notes To Your Email</h2>
+      <h2 className="text-lg text-[#10826E] mb-4">
+        Publish Your Notes To Your Email
+      </h2>
 
       <p>{loading && "Publishing..."}</p>
       <section>
@@ -51,7 +81,7 @@ function Publish() {
         <Button
           className="bg-blue-500 text-center"
           type="primary"
-          icon={<DownloadOutlined />}
+          icon={<SendOutlined />}
           size={"large"}
           onClick={handlePublish}
           disabled={loading}
