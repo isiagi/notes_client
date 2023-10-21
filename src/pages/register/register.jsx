@@ -3,8 +3,10 @@ import { Button, Form, Input, message } from "antd";
 import instance from "../../api";
 
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Register = () => {
+  const [loading, setloading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const history = useNavigate();
 
@@ -14,6 +16,7 @@ const Register = () => {
 
   const onFinish = async (values) => {
     try {
+      setloading(true);
       const response = await instance.post("/auth/signup", values);
 
       localStorage.setItem("notesToken", response.data.Token);
@@ -27,6 +30,9 @@ const Register = () => {
       error.code === "ERR_NETWORK"
         ? info(error.message)
         : info(error.response.data.username);
+      setloading(false);
+    } finally {
+      setloading(false);
     }
   };
 
@@ -125,6 +131,8 @@ const Register = () => {
             type="primary"
             htmlType="submit"
             className="w-full bg-blue-700 mb-4"
+            disabled={loading}
+            loading={loading}
           >
             Register
           </Button>
