@@ -63,7 +63,7 @@ function Home() {
     <div>
       <h4 className="text-lg text-[#10826E] mb-4">Your Notes</h4>
       <div className="grid md:grid-cols-fluid grid-cols-flud gap-6">
-        {noteData?.length === 0 ? (
+        {noteData?.length === 0 || !noteData ? (
           <Result
             icon={<FolderOpenOutlined />}
             status="warning"

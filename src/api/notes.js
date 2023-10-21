@@ -4,6 +4,9 @@ import { fetchToken } from "./fetchToken";
 export const getNotesApi = async () => {
   try {
     const token = await fetchToken();
+    if (!token) {
+      throw new Error("Token not availble");
+    }
     const response = await instance.get("/notes", {
       headers: { Authorization: `Token ${token}` },
     });

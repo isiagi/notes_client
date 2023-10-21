@@ -15,9 +15,8 @@ function Nav() {
     try {
       const res = await logoutApi("/auth/logout");
 
-      if (res.statusText === "OK") {
+      if (res.status === 200) {
         localStorage.removeItem("notesToken");
-        console.log(res);
         history("/login");
       }
     } catch (error) {
