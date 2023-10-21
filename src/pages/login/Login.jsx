@@ -4,8 +4,10 @@ import { Button, Form, Input, message, Alert } from "antd";
 import "./login.css";
 import instance from "../../api";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Login = () => {
+  const [loading, setloading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const history = useNavigate();
 
@@ -16,6 +18,7 @@ const Login = () => {
   const onFinish = async (values) => {
     console.log("Received values of form: ", values);
     try {
+      setloading(true);
       const response = await instance.post("/auth/login", values);
 
       localStorage.setItem("notesToken", response.data.Token);
@@ -30,6 +33,9 @@ const Login = () => {
       error.code === "ERR_NETWORK"
         ? info(error.message)
         : info(JSON.stringify(error.response.data));
+      setloading(false);
+    } finally {
+      setloading(false);
     }
   };
 
@@ -86,6 +92,8 @@ const Login = () => {
             type="primary"
             htmlType="submit"
             className="w-full bg-blue-700 mb-4"
+            disabled={loading}
+            loading={loading}
           >
             Log in
           </Button>
