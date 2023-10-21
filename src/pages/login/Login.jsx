@@ -1,5 +1,5 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, message, Alert } from "antd";
 
 import "./login.css";
 import instance from "../../api";
@@ -24,19 +24,20 @@ const Login = () => {
 
       setTimeout(() => {
         history("/home");
-      }, 3000);
+      }, 2000);
     } catch (error) {
       console.log(error);
       error.code === "ERR_NETWORK"
         ? info(error.message)
-        : info(error.response.data.message);
+        : info(JSON.stringify(error.response.data));
     }
   };
 
   return (
     <div className="flex flex-col items-center h-screen justify-center">
       {contextHolder}
-      <h3 className="text-xl">LogIn To JotBox</h3>
+      <Alert message="Login To Continue!" type="warning" className="my-2" />
+      <h3 className="text-xl my-3">LogIn To JotBox</h3>
       <Form
         name="normal_login"
         className="login-form"

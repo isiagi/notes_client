@@ -119,11 +119,6 @@ const Register = () => {
             placeholder="Password"
           />
         </Form.Item>
-        <Form.Item>
-          <a className="text-blue-500" href="">
-            Forgot password
-          </a>
-        </Form.Item>
 
         <Form.Item>
           <Button
