@@ -25,7 +25,7 @@ const Register = () => {
 
       setTimeout(() => {
         history("/home");
-      }, 3000);
+      }, 1000);
     } catch (error) {
       error.code === "ERR_NETWORK"
         ? info(error.message)

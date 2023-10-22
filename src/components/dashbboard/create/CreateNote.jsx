@@ -120,7 +120,11 @@ const CreateNote = () => {
               margin: "0 8px",
             }}
           >
-            <Input placeholder="Note Priority" />
+            <Select placeholder="Note Priority">
+              <Select.Option value="Low">Low</Select.Option>
+              <Select.Option value="Moderate">Moderate</Select.Option>
+              <Select.Option value="High">High</Select.Option>
+            </Select>
           </Form.Item>
           <Form.Item
             name="due_date"
@@ -137,6 +141,25 @@ const CreateNote = () => {
             <DatePicker format="YYYY-MM-DD" />
           </Form.Item>
         </Form.Item>
+
+        <Form.Item
+          name="completed"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+          style={{
+            display: "inline-block",
+            width: "calc(100%)",
+          }}
+        >
+          <Select placeholder="Note Completed Status">
+            <Select.Option value="True">True</Select.Option>
+            <Select.Option value="False">False</Select.Option>
+          </Select>
+        </Form.Item>
+
         <Form.Item name={"description"}>
           <Input.TextArea />
         </Form.Item>

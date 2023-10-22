@@ -1,16 +1,19 @@
-import { Tag, Tooltip, message, Popconfirm, Result } from "antd";
+import { Tag, Tooltip, message, Popconfirm, Result, Badge } from "antd";
 import {
   EyeOutlined,
   BookOutlined,
   DeleteOutlined,
   EditOutlined,
   FolderOpenOutlined,
+  CalendarOutlined,
 } from "@ant-design/icons";
 import { useContext, useEffect, useState } from "react";
 import { ModalContext } from "../../../context/Context";
 import ViewModal from "../../viewModal/ViewModal";
 import { Link } from "react-router-dom";
 import { deleteNoteApi, getNotesApi } from "../../../api/notes";
+
+import "./home.css";
 
 const cancel = (e) => {
   console.log(e);
@@ -36,6 +39,8 @@ function Home() {
     fetchNote();
   }, []);
 
+  console.log(noteData);
+
   const handleMenuClick = (id) => {
     setIsModalOpen(true);
 
@@ -50,6 +55,14 @@ function Home() {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const priorityColor = (priority) => {
+    return priority === "High"
+      ? "green"
+      : priority === "Moderate"
+      ? "purple"
+      : "orange";
   };
 
   const okButtonProps = {
@@ -71,57 +84,74 @@ function Home() {
             subTitle="Please create notes!"
           />
         ) : (
-          noteData?.map(({ category, description, title, priority, id }) => (
-            <div
-              key={id}
-              className="border-[1px] border-slate-100 md:p-4 p-3 flex flex-col bg-[conic-gradient(at_left,_var(--tw-gradient-stops))] from-blue-200 via-green-200 to-lime-100 relative overflow-hidden"
-            >
-              <div className="flex justify-between">
-                <BookOutlined className="text-lg text-[#10826E]" />
-                <Tooltip placement="topLeft" title={"View Note"}>
-                  <EyeOutlined
-                    onClick={() => handleMenuClick(id)}
-                    className="text-[#fff] text-xl "
+          noteData?.map(
+            ({ category, description, title, priority, id, due_date }) => (
+              <div
+                key={id}
+                className={`border-[1px] md:p-4 p-3 flex flex-col shadow-sm relative overflow-hidden`}
+              >
+                <div className="flex justify-between">
+                  <BookOutlined
+                    style={{
+                      fontSize: "1.6rem",
+                      color: priorityColor(priority),
+                    }}
                   />
-                </Tooltip>
-                <ViewModal data={note} />
-              </div>
-              <h4 className="text-base text-slate-600">
-                {title.toUpperCase()}
-              </h4>
-              <p className="text-slate-500 py-3 mb-4 mt-2">{description}</p>
-              <div className="absolute bottom-2  w-[90%]">
-                <div className="flex justify-between items-center py-2  ">
-                  <div>
-                    <Tag color="success">{category}</Tag>
-                    <Tag color="success">{priority}</Tag>
-                  </div>
-                  <div className="flex gap-3">
-                    <Popconfirm
-                      title="Delete the task"
-                      placement="leftBottom"
-                      description="Are you sure to delete this task?"
-                      onConfirm={() => handleDelete(id)}
-                      onCancel={cancel}
-                      okText="Yes"
-                      cancelText="No"
-                      okButtonProps={okButtonProps}
-                    >
-                      <DeleteOutlined
-                        className="text-red-500 text-lg"
-                        // onClick={() => handleDelete(id)}
+                  <div className="flex items-center gap-2">
+                    <Badge
+                      key={id}
+                      color={priorityColor(priority)}
+                      text={priority}
+                    />
+                    <Tooltip placement="topLeft" title={"View Note"}>
+                      <EyeOutlined
+                        onClick={() => handleMenuClick(id)}
+                        className="text-[#000] text-xl "
                       />
-                    </Popconfirm>
-                    <Tooltip placement="topRight" title={"Edit Note"}>
-                      <Link to={`/home/edit-note/${id}`}>
-                        <EditOutlined className="text-[#10826E] text-lg" />
-                      </Link>
                     </Tooltip>
+                  </div>
+                  <ViewModal data={note} />
+                </div>
+                <h4 className="text-base text-slate-600 pt-3">
+                  {title.toUpperCase()}
+                </h4>
+                <p className="text-slate-500 pb-11 pt-3">{description}</p>
+                <div className="absolute bottom-2  w-[90%]">
+                  <div className="flex justify-between items-center py-2  ">
+                    <div className="flex">
+                      <Tag color="success">{category}</Tag>
+                      <div>
+                        <CalendarOutlined />
+                        {due_date}
+                      </div>
+                    </div>
+                    <div className="flex gap-3">
+                      <Popconfirm
+                        title="Delete the task"
+                        placement="leftBottom"
+                        description="Are you sure to delete this task?"
+                        onConfirm={() => handleDelete(id)}
+                        onCancel={cancel}
+                        okText="Yes"
+                        cancelText="No"
+                        okButtonProps={okButtonProps}
+                      >
+                        <DeleteOutlined
+                          className="text-red-500 text-lg"
+                          // onClick={() => handleDelete(id)}
+                        />
+                      </Popconfirm>
+                      <Tooltip placement="topRight" title={"Edit Note"}>
+                        <Link to={`/home/edit-note/${id}`}>
+                          <EditOutlined className="text-[#10826E] text-lg" />
+                        </Link>
+                      </Tooltip>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))
+            )
+          )
         )}
       </div>
     </div>
