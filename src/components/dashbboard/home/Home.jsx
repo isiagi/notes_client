@@ -1,4 +1,12 @@
-import { Tag, Tooltip, message, Popconfirm, Result, Badge } from "antd";
+import {
+  Tag,
+  Tooltip,
+  message,
+  Popconfirm,
+  Result,
+  Badge,
+  Dropdown,
+} from "antd";
 import {
   EyeOutlined,
   BookOutlined,
@@ -19,6 +27,32 @@ const cancel = (e) => {
   console.log(e);
   message.error("Click on No");
 };
+
+const items = [
+  {
+    label: "1st menu item",
+    key: "1",
+    icon: <BookOutlined />,
+  },
+  {
+    label: "2nd menu item",
+    key: "2",
+    icon: <BookOutlined />,
+  },
+  {
+    label: "3rd menu item",
+    key: "3",
+    icon: <BookOutlined />,
+    danger: true,
+  },
+  {
+    label: "4rd menu item",
+    key: "4",
+    icon: <BookOutlined />,
+    danger: true,
+    disabled: true,
+  },
+];
 
 function Home() {
   const [noteData, setnoteData] = useState([]);
@@ -41,6 +75,11 @@ function Home() {
 
   console.log(noteData);
 
+  const handleMenuClickz = (e) => {
+    message.info("Click on menu item.");
+    console.log("click", e);
+  };
+
   const handleMenuClick = (id) => {
     setIsModalOpen(true);
 
@@ -52,6 +91,9 @@ function Home() {
     try {
       const response = await deleteNoteApi(id);
       console.log(response);
+      // After a successful delete, update the state with the updated data
+      const updatedData = noteData.filter((item) => item.id !== id);
+      setnoteData(updatedData);
     } catch (error) {
       console.log(error);
     }
@@ -72,9 +114,17 @@ function Home() {
     },
   };
 
+  const menuProps = {
+    items,
+    onClick: handleMenuClickz,
+  };
+
   return (
     <div>
-      <h4 className="text-lg text-[#10826E] mb-4">Your Notes</h4>
+      <div>
+        <h4 className="text-lg text-[#10826E] mb-4">Your Notes</h4>
+        <Dropdown.Button menu={menuProps}>Dropdown</Dropdown.Button>
+      </div>
       <div className="grid md:grid-cols-fluid grid-cols-flud gap-6">
         {noteData?.length === 0 || !noteData ? (
           <Result
