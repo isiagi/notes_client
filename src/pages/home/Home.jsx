@@ -18,7 +18,7 @@ const App = () => {
   } = theme.useToken();
 
   return (
-    <div className="pt-[10vh]">
+    <div className="">
       <Layout style={{ minHeight: "100vh" }}>
         <Sider
           theme="light"

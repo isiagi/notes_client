@@ -13,18 +13,16 @@ function Nav() {
 
   const handleLogOut = async () => {
     try {
-      const res = await logoutApi("/auth/logout");
+      await logoutApi("/auth/logout");
 
-      if (res.status === 200) {
-        localStorage.removeItem("notesToken");
-        history("/login");
-      }
+      localStorage.removeItem("notesToken");
+      history("/login");
     } catch (error) {
       console.log(error);
     }
   };
   return (
-    <nav className="flex justify-between items-center bg-[#0F4C81] h-[10vh] px-6 fixed w-full z-10">
+    <nav className="flex justify-between items-center bg-[#0F4C81] h-[10vh] px-6  w-full z-10">
       <Link to="/">
         <Text className="text-xl text-white font-semibold">JotBox</Text>
       </Link>
