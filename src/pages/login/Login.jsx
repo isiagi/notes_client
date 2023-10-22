@@ -27,7 +27,7 @@ const Login = () => {
 
       setTimeout(() => {
         history("/home");
-      }, 2000);
+      }, 1000);
     } catch (error) {
       console.log(error);
       error.code === "ERR_NETWORK"
