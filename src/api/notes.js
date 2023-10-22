@@ -43,6 +43,84 @@ export const getNoteByIdApi = async (id) => {
   }
 };
 
+export const getNoteOverDue = async () => {
+  try {
+    const token = await fetchToken();
+    const response = await instance.get(`/notes/due_dated`, {
+      headers: { Authorization: `Token ${token}` },
+    });
+    return response;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+export const getNoteCompleted = async () => {
+  try {
+    const token = await fetchToken();
+    const response = await instance.get(`/notes/?completed=false`, {
+      headers: { Authorization: `Token ${token}` },
+    });
+    return response;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+export const getNoteUnCompleted = async () => {
+  try {
+    const token = await fetchToken();
+    const response = await instance.get(`/notes/?completed=false`, {
+      headers: { Authorization: `Token ${token}` },
+    });
+    return response;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+export const sortNotelatest = async () => {
+  try {
+    const token = await fetchToken();
+    const response = await instance.get(`/notes/?ordering=created_at`, {
+      headers: { Authorization: `Token ${token}` },
+    });
+    return response;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+export const sortNoteOld = async () => {
+  try {
+    const token = await fetchToken();
+    const response = await instance.get(`/notes/?ordering=-created_at`, {
+      headers: { Authorization: `Token ${token}` },
+    });
+    return response;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+export const orderNoteAscendingPriority = async () => {
+  try {
+    const token = await fetchToken();
+    const response = await instance.get(`/notes/?ordering=priority`, {
+      headers: { Authorization: `Token ${token}` },
+    });
+    return response;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
 export const editNoteApi = async (id, values) => {
   try {
     const token = await fetchToken();
