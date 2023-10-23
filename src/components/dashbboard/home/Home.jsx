@@ -1,4 +1,4 @@
-import { Tag, Tooltip, message, Popconfirm, Result, Badge } from "antd";
+import { Tag, Tooltip, message, Popconfirm, Result, Badge, Select } from "antd";
 import {
   EyeOutlined,
   BookOutlined,
@@ -6,12 +6,22 @@ import {
   EditOutlined,
   FolderOpenOutlined,
   CalendarOutlined,
+  CheckCircleTwoTone,
 } from "@ant-design/icons";
 import { useContext, useEffect, useState } from "react";
 import { ModalContext } from "../../../context/Context";
 import ViewModal from "../../viewModal/ViewModal";
 import { Link } from "react-router-dom";
-import { deleteNoteApi, getNotesApi } from "../../../api/notes";
+import {
+  deleteNoteApi,
+  getNoteCompleted,
+  getNoteOverDue,
+  getNoteUnCompleted,
+  getNotesApi,
+  orderNoteAscendingPriority,
+  sortNoteOld,
+  sortNotelatest,
+} from "../../../api/notes";
 
 import "./home.css";
 
@@ -41,6 +51,34 @@ function Home() {
 
   console.log(noteData);
 
+  const handleChange = async (value) => {
+    console.log(`selected ${value}`);
+    if (value === "due_date") {
+      const res = await getNoteOverDue();
+      setnoteData(res.data);
+    }
+    if (value === "completed") {
+      const res = await getNoteCompleted();
+      setnoteData(res.data);
+    }
+    if (value === "Uncompleted") {
+      const res = await getNoteUnCompleted();
+      setnoteData(res.data);
+    }
+    if (value === "latest") {
+      const res = await sortNotelatest();
+      setnoteData(res.data);
+    }
+    if (value === "oldest") {
+      const res = await sortNoteOld();
+      setnoteData(res.data);
+    }
+    if (value === "work") {
+      const res = await orderNoteAscendingPriority();
+      setnoteData(res.data);
+    }
+  };
+
   const handleMenuClick = (id) => {
     setIsModalOpen(true);
 
@@ -52,6 +90,9 @@ function Home() {
     try {
       const response = await deleteNoteApi(id);
       console.log(response);
+      // After a successful delete, update the state with the updated data
+      const updatedData = noteData.filter((item) => item.id !== id);
+      setnoteData(updatedData);
     } catch (error) {
       console.log(error);
     }
@@ -74,7 +115,52 @@ function Home() {
 
   return (
     <div>
-      <h4 className="text-lg text-[#10826E] mb-4">Your Notes</h4>
+      <div className="flex justify-between">
+        <h4 className="text-lg text-[#10826E] mb-4">Your Notes</h4>
+        <Select
+          placeholder="Sort & Filter"
+          style={{
+            width: 120,
+          }}
+          onChange={handleChange}
+          options={[
+            {
+              label: "Filtering",
+              options: [
+                {
+                  value: "completed",
+                  label: "Completed",
+                },
+                {
+                  value: "Uncompleted",
+                  label: "Uncompleted",
+                },
+                {
+                  value: "due_date",
+                  label: "Over Dued",
+                },
+              ],
+            },
+            {
+              label: "Sorting",
+              options: [
+                {
+                  value: "latest",
+                  label: "From Lastest",
+                },
+                {
+                  value: "oldest",
+                  label: "From Oldest",
+                },
+                {
+                  value: "work",
+                  label: "Asce Priority",
+                },
+              ],
+            },
+          ]}
+        />
+      </div>
       <div className="grid md:grid-cols-fluid grid-cols-flud gap-6">
         {noteData?.length === 0 || !noteData ? (
           <Result
@@ -85,7 +171,15 @@ function Home() {
           />
         ) : (
           noteData?.map(
-            ({ category, description, title, priority, id, due_date }) => (
+            ({
+              category,
+              description,
+              title,
+              priority,
+              id,
+              due_date,
+              completed,
+            }) => (
               <div
                 key={id}
                 className={`border-[1px] md:p-4 p-3 flex flex-col shadow-sm relative overflow-hidden`}
@@ -106,21 +200,32 @@ function Home() {
                     <Tooltip placement="topLeft" title={"View Note"}>
                       <EyeOutlined
                         onClick={() => handleMenuClick(id)}
-                        className="text-[#000] text-xl "
+                        className="text-slate-700 text-xl "
                       />
                     </Tooltip>
                   </div>
                   <ViewModal data={note} />
                 </div>
-                <h4 className="text-base text-slate-600 pt-3">
+                <h4 className="text-slate-700 pt-4 pb-2 text-lg font-medium">
                   {title.toUpperCase()}
                 </h4>
-                <p className="text-slate-500 pb-11 pt-3">{description}</p>
+                {completed ? (
+                  <div className="flex items-center gap-1 text-slate-500">
+                    <CheckCircleTwoTone twoToneColor="#52c41a" />
+                    completed
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1 text-slate-500">
+                    <CheckCircleTwoTone twoToneColor="#eb2f96" />
+                    Uncompleted
+                  </div>
+                )}
+                <p className="text-slate-500 pb-11 pt-4">{description}</p>
                 <div className="absolute bottom-2  w-[90%]">
                   <div className="flex justify-between items-center py-2  ">
                     <div className="flex">
                       <Tag color="success">{category}</Tag>
-                      <div>
+                      <div className="text-slate-700 font-medium flex gap-1 items-center">
                         <CalendarOutlined />
                         {due_date}
                       </div>

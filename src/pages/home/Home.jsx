@@ -2,20 +2,26 @@ import { useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
+  DownloadOutlined,
+  SendOutlined,
+  HomeOutlined,
+  FileAddOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Button, theme } from "antd";
 import { Link, Outlet } from "react-router-dom";
+import { useStore } from "../../context/AuthContext";
 
 const { Header, Sider, Content } = Layout;
 
 const App = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const bears = useStore((state) => state.getLoginedUser);
+  const user = useStore((state) => state.user);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  bears();
 
   return (
     <div className="">
@@ -33,7 +39,11 @@ const App = () => {
             console.log(collapsed, type);
           }}
         >
-          <div className="demo-logo-vertical" />
+          <div className="demo-logo-vertical bg-[#E6F4FE] py-3 uppercase text-green-700">
+            <p className="bg-gray-300 mx-5 py-2 rounded text-center font-semibold md:text-[14px] text-[10px]">{`Hello ${
+              user && user
+            }`}</p>
+          </div>
           <Menu
             theme="light"
             mode="inline"
@@ -41,22 +51,22 @@ const App = () => {
             items={[
               {
                 key: "1",
-                icon: <UserOutlined />,
+                icon: <HomeOutlined />,
                 label: <Link to="/home">Home</Link>,
               },
               {
                 key: "4",
-                icon: <VideoCameraOutlined className="text-blue-600" />,
+                icon: <FileAddOutlined />,
                 label: <Link to="/home/create-notes">Create Note</Link>,
               },
               {
                 key: "2",
-                icon: <VideoCameraOutlined />,
+                icon: <SendOutlined />,
                 label: <Link to="/home/publish-notes">Publish Note</Link>,
               },
               {
                 key: "3",
-                icon: <UploadOutlined />,
+                icon: <DownloadOutlined />,
                 label: <Link to="/home/export-notes">Export Note</Link>,
               },
             ]}
@@ -82,13 +92,12 @@ const App = () => {
           </Header>
           <Content
             style={{
-              margin: "24px 16px",
-              padding: 24,
               minHeight: 280,
               background: colorBgContainer,
               overflowX: "hidden",
               overflowY: "scroll",
             }}
+            className="md:my-6 md:mx-4 my-4 mx-2 md:p-7 p-3"
           >
             <Outlet />
           </Content>

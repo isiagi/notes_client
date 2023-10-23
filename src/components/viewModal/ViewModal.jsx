@@ -22,6 +22,7 @@ function ViewModal({ data }) {
         onCancel={handleCancel}
       >
         <p>{data[0]?.description}</p>
+        <p>{data[0]?.completed}</p>
       </Modal>
     </>
   );
