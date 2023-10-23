@@ -2,16 +2,17 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input, message, Alert } from "antd";
 
 import "./login.css";
+import instance from "../../api";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useStore } from "../../context/AuthContext";
+// import { useStore } from "../../context/AuthContext";
 
 const Login = () => {
   const [loading, setloading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const history = useNavigate();
 
-  const loginUser = useStore((state) => state.logInUser);
+  // const loginUser = useStore((state) => state.logInUser);
 
   const info = (msg) => {
     messageApi.info(msg);
@@ -21,7 +22,11 @@ const Login = () => {
     console.log("Received values of form: ", values);
     try {
       setloading(true);
-      await loginUser(values);
+      const response = await instance.post("/auth/login", values);
+
+      localStorage.setItem("notesToken", response.data.Token);
+
+      localStorage.setItem("noteUser", response.data?.User.username);
 
       info("You have successfully Logged In");
 
