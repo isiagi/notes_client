@@ -5,7 +5,7 @@ export const authApi = async (route, values) => {
   try {
     const response = await instance.post(`${route}`, values);
 
-    localStorage.setItem("notesToken", response.data.Token);
+    return response;
   } catch (error) {
     console.log(error);
   }

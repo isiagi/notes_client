@@ -59,7 +59,7 @@ export const getNoteOverDue = async () => {
 export const getNoteCompleted = async () => {
   try {
     const token = await fetchToken();
-    const response = await instance.get(`/notes/?completed=false`, {
+    const response = await instance.get(`/notes/?completed=true`, {
       headers: { Authorization: `Token ${token}` },
     });
     return response;
@@ -85,7 +85,7 @@ export const getNoteUnCompleted = async () => {
 export const sortNotelatest = async () => {
   try {
     const token = await fetchToken();
-    const response = await instance.get(`/notes/?ordering=created_at`, {
+    const response = await instance.get(`/notes/?ordering=-created_at`, {
       headers: { Authorization: `Token ${token}` },
     });
     return response;
@@ -98,7 +98,7 @@ export const sortNotelatest = async () => {
 export const sortNoteOld = async () => {
   try {
     const token = await fetchToken();
-    const response = await instance.get(`/notes/?ordering=-created_at`, {
+    const response = await instance.get(`/notes/?ordering=created_at`, {
       headers: { Authorization: `Token ${token}` },
     });
     return response;
