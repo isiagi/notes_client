@@ -8,6 +8,7 @@ import {
   Select,
   Spin,
   Alert,
+  notification,
 } from "antd";
 import {
   EyeOutlined,
@@ -46,6 +47,14 @@ function Home() {
   const [note, setNote] = useState({});
   const { setIsModalOpen } = useContext(ModalContext);
   const [loading, setLoading] = useState(false);
+  const [api, contextHolder] = notification.useNotification();
+
+  const openNotification = (msg, desc) => {
+    api.open({
+      message: msg,
+      description: desc,
+    });
+  };
 
   useEffect(() => {
     const fetchNote = async () => {
@@ -56,6 +65,10 @@ function Home() {
       } catch (error) {
         console.log(error);
         setLoading(false);
+        openNotification(
+          "Fetch Note was Unsuccessful! ",
+          "Error Fetching Notes"
+        );
         setnoteData([]);
       } finally {
         setLoading(false);
@@ -70,28 +83,64 @@ function Home() {
   const handleChange = async (value) => {
     console.log(`selected ${value}`);
     if (value === "due_date") {
+      setLoading(true);
       const res = await getNoteOverDue();
       setnoteData(res.data);
+      openNotification(
+        "Over Dues Notes!",
+        "Your current Over Dues Notes successful got !"
+      );
+      setLoading(false);
     }
     if (value === "completed") {
+      setLoading(true);
       const res = await getNoteCompleted();
       setnoteData(res.data);
+      openNotification(
+        "Completed Notes!",
+        "Your current Completed Notes successful got !"
+      );
+      setLoading(false);
     }
     if (value === "Uncompleted") {
+      setLoading(true);
       const res = await getNoteUnCompleted();
       setnoteData(res.data);
+      openNotification(
+        "Uncompleted Notes!",
+        "Your current Uncompleted Notes successful got !"
+      );
+      setLoading(false);
     }
     if (value === "latest") {
+      setLoading(true);
       const res = await sortNotelatest();
       setnoteData(res.data);
+      openNotification(
+        "Sorted From Latest",
+        "Your current have been Sorted From Latest"
+      );
+      setLoading(false);
     }
     if (value === "oldest") {
+      setLoading(true);
       const res = await sortNoteOld();
       setnoteData(res.data);
+      openNotification(
+        "Sorted From Oldest",
+        "Your current have been Sorted From Oldest"
+      );
+      setLoading(false);
     }
     if (value === "work") {
+      setLoading(true);
       const res = await orderNoteAscendingPriority();
       setnoteData(res.data);
+      openNotification(
+        "Arranged in Ascending !",
+        "Your current Notes have been Arranged in Ascending !"
+      );
+      setLoading(false);
     }
   };
 
@@ -106,6 +155,10 @@ function Home() {
     try {
       const response = await deleteNoteApi(id);
       console.log(response);
+      openNotification(
+        "Delete Note was successful! ",
+        "Note was successfully deleted"
+      );
       // After a successful delete, update the state with the updated data
       const updatedData = noteData.filter((item) => item.id !== id);
       setnoteData(updatedData);
@@ -131,6 +184,7 @@ function Home() {
 
   return (
     <div>
+      {contextHolder}
       <div className="flex justify-between">
         <h4 className="text-lg text-[#10826E] mb-4">Your Notes</h4>
         <Select
@@ -180,8 +234,8 @@ function Home() {
       {loading ? (
         <Spin tip="Loading...">
           <Alert
-            message="Fetch Notes"
-            description="Jotbox loading your current notes"
+            message="Fetch Notes !"
+            description="Jotbox is getting your notes"
             type="info"
           />
         </Spin>

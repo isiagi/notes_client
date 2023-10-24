@@ -1,7 +1,7 @@
 export function breakParagraphWithEllipsis(
   text,
   maxLineLength = 45,
-  maxLines = 3
+  maxLines = 2
 ) {
   const lines = [];
   let remainingText = text;
