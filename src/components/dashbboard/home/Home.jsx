@@ -34,6 +34,7 @@ import {
 } from "../../../api/notes";
 
 import "./home.css";
+import { breakParagraphWithEllipsis } from "./breakParagraphWithEllipsis";
 
 const cancel = (e) => {
   console.log(e);
@@ -244,7 +245,11 @@ function Home() {
                       Uncompleted
                     </div>
                   )}
-                  <p className="text-slate-500 pb-11 pt-4">{description}</p>
+                  <p className="text-slate-500 text-ellipsis pb-11 pt-4">
+                    {description.length < 40
+                      ? description
+                      : breakParagraphWithEllipsis(description)}
+                  </p>
                   <div className="absolute bottom-2  w-[90%]">
                     <div className="flex justify-between items-center py-2  ">
                       <div className="flex">

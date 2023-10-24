@@ -185,7 +185,7 @@ const CreateNote = () => {
         </Form.Item>
 
         <Form.Item name={"description"}>
-          <Input.TextArea />
+          <Input.TextArea maxLength={1000} showCount={true} />
         </Form.Item>
 
         <Form.Item
