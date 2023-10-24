@@ -1,5 +1,5 @@
 import { LockOutlined, UserOutlined, MailOutlined } from "@ant-design/icons";
-import { Button, Form, Input, message } from "antd";
+import { Alert, Button, Form, Input, Spin, message } from "antd";
 import instance from "../../api";
 
 import { useNavigate } from "react-router-dom";
@@ -39,6 +39,15 @@ const Register = () => {
   return (
     <div className="flex flex-col items-center h-screen justify-center">
       {contextHolder}
+      {loading && (
+        <Spin tip="Signing...">
+          <Alert
+            message="Signing You Up"
+            description="Jotbox currently registering you up, Wait for confirmation Alert"
+            type="info"
+          />
+        </Spin>
+      )}
       <h3 className="text-xl">Register To JotBox</h3>
       <Form
         name="normal_login"
