@@ -1,8 +1,18 @@
-import { Button, DatePicker, Form, Input, Select, notification } from "antd";
+import {
+  Alert,
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  Select,
+  Spin,
+  notification,
+} from "antd";
 import moment from "moment";
 
 import { useNavigate } from "react-router-dom";
 import { createNoteApi } from "../../../api/notes";
+import { useState } from "react";
 
 const layout = {
   labelCol: {
@@ -15,6 +25,7 @@ const layout = {
 const CreateNote = () => {
   const history = useNavigate();
   const [api, contextHolder] = notification.useNotification();
+  const [loading, setLoading] = useState(false);
 
   const openNotification = (msg, desc) => {
     api.open({
@@ -27,6 +38,7 @@ const CreateNote = () => {
     console.log("Received values of form: ", values);
 
     try {
+      setLoading(true);
       values["due_date"] = moment(values["due_date"]).format("YYYY-MM-DD");
 
       const response = await createNoteApi(values);
@@ -41,11 +53,23 @@ const CreateNote = () => {
     } catch (error) {
       console.log(error);
       openNotification("Creation Unsuccessful", `Failed to create new note!`);
+      setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
   return (
     <div className="grid place-items-center h-full">
       {contextHolder}
+      {loading && (
+        <Spin tip="Creating Note...">
+          <Alert
+            message="Jotbox creating note in progress !"
+            description="Jotbox is currently creating you Note, Wait for confirmation Alert"
+            type="info"
+          />
+        </Spin>
+      )}
       <h2 className="text-lg text-[#10826E]">Create A New Note</h2>
       <Form
         {...layout}
@@ -173,6 +197,8 @@ const CreateNote = () => {
             className="bg-blue-500 w-full"
             type="primary"
             htmlType="submit"
+            disabled={loading}
+            loading={loading}
           >
             Create Note
           </Button>

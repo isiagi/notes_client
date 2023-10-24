@@ -1,5 +1,5 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Form, Input, message, Alert } from "antd";
+import { Button, Form, Input, message, Alert, Spin } from "antd";
 
 import "./login.css";
 import { useNavigate } from "react-router-dom";
@@ -27,7 +27,7 @@ const Login = () => {
 
       setTimeout(() => {
         history("/home");
-      }, 1000);
+      }, 2000);
     } catch (error) {
       console.log(error);
       error.code === "ERR_NETWORK"
@@ -42,7 +42,18 @@ const Login = () => {
   return (
     <div className="flex flex-col items-center h-screen justify-center">
       {contextHolder}
-      <Alert message="Login To Continue!" type="warning" className="my-2" />
+      {loading && (
+        <Spin tip="Logging In...">
+          <Alert
+            message="Logging You In !"
+            description="Jotbox currently trying to log you in, Wait for confirmation Alert"
+            type="info"
+          />
+        </Spin>
+      )}
+      {!loading && (
+        <Alert message="Login To Continue!" type="warning" className="my-2" />
+      )}
       <h3 className="text-xl my-3">LogIn To JotBox</h3>
       <Form
         name="normal_login"

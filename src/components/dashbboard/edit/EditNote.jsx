@@ -1,4 +1,13 @@
-import { Button, DatePicker, Form, Input, Select, notification } from "antd";
+import {
+  Alert,
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  Select,
+  Spin,
+  notification,
+} from "antd";
 import moment from "moment";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -14,6 +23,7 @@ const layout = {
 };
 const CreateNote = () => {
   const [noteData, setnoteData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const history = useNavigate();
   const [api, contextHolder] = notification.useNotification();
@@ -21,11 +31,15 @@ const CreateNote = () => {
   useEffect(() => {
     const fetchNote = async () => {
       try {
+        setLoading(true);
         const response = await getNoteByIdApi(id);
         setnoteData(response.data);
       } catch (error) {
         console.log(error);
         setnoteData([]);
+        setLoading(false);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -44,23 +58,37 @@ const CreateNote = () => {
     console.log("Received values of form: ", values);
 
     try {
+      setLoading(true);
       values["due_date"] = moment(values["due_date"]).format("YYYY-MM-DD");
       const response = await editNoteApi(id, values);
       openNotification(
         "Update Successful!",
         `New Note with Title ${response.data.title} has been Edited!`
       );
+
       setTimeout(() => {
         history("/home");
       }, 3000);
     } catch (error) {
       console.log(error);
       openNotification("Edit Unsuccessful", `Failed to Edit note!`);
+      setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
   return (
     <div className="grid place-items-center">
       {contextHolder}
+      {loading && (
+        <Spin tip="Loading Editting...">
+          <Alert
+            message="Editting available in a few !"
+            description="Jotbox Edit. After edit click, Wait for confirmation Alert "
+            type="info"
+          />
+        </Spin>
+      )}
       <h2 className="text-lg text-[#10826E] mb-4">Edit Note</h2>
       <Form
         {...layout}
@@ -183,6 +211,8 @@ const CreateNote = () => {
             className="bg-blue-500 w-full"
             type="primary"
             htmlType="submit"
+            disabled={loading}
+            loading={loading}
           >
             Edit Note
           </Button>

@@ -1,4 +1,14 @@
-import { Tag, Tooltip, message, Popconfirm, Result, Badge, Select } from "antd";
+import {
+  Tag,
+  Tooltip,
+  message,
+  Popconfirm,
+  Result,
+  Badge,
+  Select,
+  Spin,
+  Alert,
+} from "antd";
 import {
   EyeOutlined,
   BookOutlined,
@@ -34,15 +44,20 @@ function Home() {
   const [noteData, setnoteData] = useState([]);
   const [note, setNote] = useState({});
   const { setIsModalOpen } = useContext(ModalContext);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchNote = async () => {
       try {
+        setLoading(true);
         const response = await getNotesApi();
         setnoteData(response.data);
       } catch (error) {
         console.log(error);
+        setLoading(false);
         setnoteData([]);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -161,104 +176,114 @@ function Home() {
           ]}
         />
       </div>
-      <div className="grid md:grid-cols-fluid grid-cols-flud gap-6">
-        {noteData?.length === 0 || !noteData ? (
-          <Result
-            icon={<FolderOpenOutlined />}
-            status="warning"
-            title="No Notes Found"
-            subTitle="Please create notes!"
+      {loading ? (
+        <Spin tip="Loading...">
+          <Alert
+            message="Fetch Notes"
+            description="Jotbox loading your current notes"
+            type="info"
           />
-        ) : (
-          noteData?.map(
-            ({
-              category,
-              description,
-              title,
-              priority,
-              id,
-              due_date,
-              completed,
-            }) => (
-              <div
-                key={id}
-                className={`border-[1px] md:p-4 p-3 flex flex-col shadow-sm relative overflow-hidden`}
-              >
-                <div className="flex justify-between">
-                  <BookOutlined
-                    style={{
-                      fontSize: "1.6rem",
-                      color: priorityColor(priority),
-                    }}
-                  />
-                  <div className="flex items-center gap-2">
-                    <Badge
-                      key={id}
-                      color={priorityColor(priority)}
-                      text={priority}
+        </Spin>
+      ) : (
+        <div className="grid md:grid-cols-fluid grid-cols-flud gap-6">
+          {noteData?.length === 0 || !noteData ? (
+            <Result
+              icon={<FolderOpenOutlined />}
+              status="warning"
+              title="No Notes Found"
+              subTitle="Please create notes!"
+            />
+          ) : (
+            noteData?.map(
+              ({
+                category,
+                description,
+                title,
+                priority,
+                id,
+                due_date,
+                completed,
+              }) => (
+                <div
+                  key={id}
+                  className={`border-[1px] md:p-4 p-3 flex flex-col shadow-sm relative overflow-hidden`}
+                >
+                  <div className="flex justify-between">
+                    <BookOutlined
+                      style={{
+                        fontSize: "1.6rem",
+                        color: priorityColor(priority),
+                      }}
                     />
-                    <Tooltip placement="topLeft" title={"View Note"}>
-                      <EyeOutlined
-                        onClick={() => handleMenuClick(id)}
-                        className="text-slate-700 text-xl "
+                    <div className="flex items-center gap-2">
+                      <Badge
+                        key={id}
+                        color={priorityColor(priority)}
+                        text={priority}
                       />
-                    </Tooltip>
-                  </div>
-                  <ViewModal data={note} />
-                </div>
-                <h4 className="text-slate-700 pt-4 pb-2 text-lg font-medium">
-                  {title.toUpperCase()}
-                </h4>
-                {completed ? (
-                  <div className="flex items-center gap-1 text-slate-500">
-                    <CheckCircleTwoTone twoToneColor="#52c41a" />
-                    completed
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-1 text-slate-500">
-                    <CheckCircleTwoTone twoToneColor="#eb2f96" />
-                    Uncompleted
-                  </div>
-                )}
-                <p className="text-slate-500 pb-11 pt-4">{description}</p>
-                <div className="absolute bottom-2  w-[90%]">
-                  <div className="flex justify-between items-center py-2  ">
-                    <div className="flex">
-                      <Tag color="success">{category}</Tag>
-                      <div className="text-slate-700 font-medium flex gap-1 items-center">
-                        <CalendarOutlined />
-                        {due_date}
-                      </div>
-                    </div>
-                    <div className="flex gap-3">
-                      <Popconfirm
-                        title="Delete the task"
-                        placement="leftBottom"
-                        description="Are you sure to delete this task?"
-                        onConfirm={() => handleDelete(id)}
-                        onCancel={cancel}
-                        okText="Yes"
-                        cancelText="No"
-                        okButtonProps={okButtonProps}
-                      >
-                        <DeleteOutlined
-                          className="text-red-500 text-lg"
-                          // onClick={() => handleDelete(id)}
+                      <Tooltip placement="topLeft" title={"View Note"}>
+                        <EyeOutlined
+                          onClick={() => handleMenuClick(id)}
+                          className="text-slate-700 text-xl "
                         />
-                      </Popconfirm>
-                      <Tooltip placement="topRight" title={"Edit Note"}>
-                        <Link to={`/home/edit-note/${id}`}>
-                          <EditOutlined className="text-[#10826E] text-lg" />
-                        </Link>
                       </Tooltip>
                     </div>
+                    <ViewModal data={note} />
+                  </div>
+                  <h4 className="text-slate-700 pt-4 pb-2 text-lg font-medium">
+                    {title.toUpperCase()}
+                  </h4>
+                  {completed ? (
+                    <div className="flex items-center gap-1 text-slate-500">
+                      <CheckCircleTwoTone twoToneColor="#52c41a" />
+                      completed
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1 text-slate-500">
+                      <CheckCircleTwoTone twoToneColor="#eb2f96" />
+                      Uncompleted
+                    </div>
+                  )}
+                  <p className="text-slate-500 pb-11 pt-4">{description}</p>
+                  <div className="absolute bottom-2  w-[90%]">
+                    <div className="flex justify-between items-center py-2  ">
+                      <div className="flex">
+                        <Tag color="success">{category}</Tag>
+                        <div className="text-slate-700 font-medium flex gap-1 items-center">
+                          <CalendarOutlined />
+                          {due_date}
+                        </div>
+                      </div>
+                      <div className="flex gap-3">
+                        <Popconfirm
+                          title="Delete the task"
+                          placement="leftBottom"
+                          description="Are you sure to delete this task?"
+                          onConfirm={() => handleDelete(id)}
+                          onCancel={cancel}
+                          okText="Yes"
+                          cancelText="No"
+                          okButtonProps={okButtonProps}
+                        >
+                          <DeleteOutlined
+                            className="text-red-500 text-lg"
+                            // onClick={() => handleDelete(id)}
+                          />
+                        </Popconfirm>
+                        <Tooltip placement="topRight" title={"Edit Note"}>
+                          <Link to={`/home/edit-note/${id}`}>
+                            <EditOutlined className="text-[#10826E] text-lg" />
+                          </Link>
+                        </Tooltip>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )
             )
-          )
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

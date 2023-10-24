@@ -1,10 +1,12 @@
-import { MailOutlined } from "@ant-design/icons";
-import { Button, Form, Input, message } from "antd";
+import { LockOutlined } from "@ant-design/icons";
+import { Alert, Button, Form, Input, Spin, message } from "antd";
 import instance from "../../api";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Reset = () => {
   const [messageApi, contextHolder] = message.useMessage();
+  const [loading, setLoading] = useState(false);
   const history = useNavigate();
   const location = useLocation();
   const pathname = location.pathname;
@@ -32,10 +34,11 @@ const Reset = () => {
   const onFinish = async (values) => {
     console.log("Received values of form: ", values);
     try {
+      setLoading(true);
       const response = await instance.patch(`/${path}`, values);
 
       console.log(response);
-      info("You have successfully Logged In");
+      info("Your password has been successfuly changed");
 
       setTimeout(() => {
         history("/home");
@@ -45,12 +48,24 @@ const Reset = () => {
       error.code === "ERR_NETWORK"
         ? info(error.message)
         : info(error.response.data.message);
+      setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="flex flex-col items-center h-screen justify-center">
       {contextHolder}
+      {loading && (
+        <Spin tip="Resetting...">
+          <Alert
+            message="Resetting Password in process !"
+            description="Jotbox is currently Resetting your password, Wait for confirmation Alert"
+            type="info"
+          />
+        </Spin>
+      )}
       <h3 className="text-xl">JotBox Reset Password</h3>
       <Form
         name="normal_login"
@@ -70,8 +85,9 @@ const Reset = () => {
           ]}
         >
           <Input
-            prefix={<MailOutlined className="site-form-item-icon" />}
-            placeholder="Password"
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            type="password"
+            placeholder="Enter New Password Here!"
           />
         </Form.Item>
 
@@ -80,6 +96,8 @@ const Reset = () => {
             type="primary"
             htmlType="submit"
             className="w-full bg-blue-700 mb-4"
+            disabled={loading}
+            loading={loading}
           >
             Reset Password!
           </Button>
