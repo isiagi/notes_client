@@ -6,7 +6,9 @@ import { useState } from "react";
 
 const Reset = () => {
   const [messageApi, contextHolder] = message.useMessage();
+
   const [loading, setLoading] = useState(false);
+
   const history = useNavigate();
   const location = useLocation();
   const pathname = location.pathname;
@@ -34,6 +36,7 @@ const Reset = () => {
   const onFinish = async (values) => {
     console.log("Received values of form: ", values);
     try {
+
       setLoading(true);
       const response = await instance.patch(`/${path}`, values);
 
@@ -48,6 +51,7 @@ const Reset = () => {
       error.code === "ERR_NETWORK"
         ? info(error.message)
         : info(error.response.data.message);
+
       setLoading(false);
     } finally {
       setLoading(false);
@@ -57,6 +61,7 @@ const Reset = () => {
   return (
     <div className="flex flex-col items-center h-screen justify-center">
       {contextHolder}
+
       {loading && (
         <Spin tip="Resetting...">
           <Alert
@@ -67,6 +72,7 @@ const Reset = () => {
         </Spin>
       )}
       <h3 className="text-xl">JotBox Reset Password</h3>
+
       <Form
         name="normal_login"
         className="login-form"
