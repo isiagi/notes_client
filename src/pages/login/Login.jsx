@@ -45,7 +45,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col items-center h-screen justify-center">
+    <div className="flex flex-col items-center h-[90vh] justify-center">
       {contextHolder}
       {loading && (
         <Spin tip="Logging In...">
