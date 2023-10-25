@@ -36,7 +36,6 @@ const Reset = () => {
   const onFinish = async (values) => {
     console.log("Received values of form: ", values);
     try {
-
       setLoading(true);
       const response = await instance.patch(`/${path}`, values);
 
@@ -71,7 +70,7 @@ const Reset = () => {
           />
         </Spin>
       )}
-      <h3 className="text-xl">JotBox Reset Password</h3>
+      <h3 className="text-xl text-[#0F4C81] pb-6">JotBox Reset Password</h3>
 
       <Form
         name="normal_login"

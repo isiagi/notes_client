@@ -59,7 +59,7 @@ const Login = () => {
       {!loading && (
         <Alert message="Login To Continue!" type="warning" className="my-2" />
       )}
-      <h3 className="text-xl my-3">LogIn To JotBox</h3>
+      <h3 className="text-xl my-3 text-[#0F4C81]">LogIn To JotBox</h3>
       <Form
         name="normal_login"
         className="login-form"

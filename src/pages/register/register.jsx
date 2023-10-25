@@ -48,7 +48,7 @@ const Register = () => {
           />
         </Spin>
       )}
-      <h3 className="text-xl">Register To JotBox</h3>
+      <h3 className="text-xl text-[#0F4C81] pb-6">Register To JotBox</h3>
       <Form
         name="normal_login"
         className="login-form"

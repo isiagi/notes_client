@@ -1,17 +1,14 @@
 import { MailOutlined } from "@ant-design/icons";
-import { Alert, Button, Form, Input, Spin, message } from "antd";
+import { Alert, Button, Form, Input, Result, Spin, message } from "antd";
 import instance from "../../api";
-
-import { useNavigate } from "react-router-dom";
 
 import { useState } from "react";
 
 const Forgot = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
-  const history = useNavigate();
   const [loading, setLoading] = useState(false);
-
+  const [success, setSuccess] = useState(false);
 
   const info = (msg) => {
     messageApi.info(msg);
@@ -20,10 +17,11 @@ const Forgot = () => {
   const onFinish = async (values) => {
     console.log("Received values of form: ", values);
     try {
-
       setLoading(true);
 
       const response = await instance.post("/auth/forgot_password", values);
+
+      setSuccess(true);
 
       console.log(response);
       info("Email Reset Link Successful Sent your email");
@@ -38,9 +36,20 @@ const Forgot = () => {
       setLoading(false);
     } finally {
       setLoading(false);
-
     }
   };
+
+  if (success) {
+    return (
+      <div className="grid place-items-center md:pt-[10%] pt-[15%]">
+        <Result
+          status="success"
+          title="Send Reset Email Confirmation"
+          subTitle="Successfully Sent Email Link To Your Email"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center h-screen justify-center">
@@ -54,7 +63,8 @@ const Forgot = () => {
           />
         </Spin>
       )}
-      <h3 className="text-xl">JotBox Forgot Password</h3>
+
+      <h3 className="text-xl text-[#0F4C81] pb-6">JotBox Forgot Password</h3>
       <Form
         name="normal_login"
         className="login-form"
