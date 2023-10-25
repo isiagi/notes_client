@@ -26,6 +26,7 @@ const CreateNote = () => {
   const history = useNavigate();
   const [api, contextHolder] = notification.useNotification();
   const [loading, setLoading] = useState(false);
+  const [date, setDate] = useState("");
 
   const openNotification = (msg, desc) => {
     api.open({
@@ -34,12 +35,16 @@ const CreateNote = () => {
     });
   };
 
+  const onChange = (date, dateString) => {
+    setDate(dateString);
+  };
+
   const onFinish = async (values) => {
     console.log("Received values of form: ", values);
 
     try {
       setLoading(true);
-      values["due_date"] = moment(values["due_date"]).format("YYYY-MM-DD");
+      values.due_date = moment(date).format("YYYY-MM-DD");
 
       const response = await createNoteApi(values);
 
@@ -162,7 +167,7 @@ const CreateNote = () => {
               width: "calc(50% - 8px)",
             }}
           >
-            <DatePicker format="YYYY-MM-DD" />
+            <DatePicker onChange={onChange} format="YYYY-MM-DD" />
           </Form.Item>
         </Form.Item>
 
