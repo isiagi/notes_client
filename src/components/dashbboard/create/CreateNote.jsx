@@ -59,7 +59,7 @@ const CreateNote = () => {
     }
   };
   return (
-    <div className="grid place-items-center h-full">
+    <div className="grid place-items-center pt-5">
       {contextHolder}
       {loading && (
         <Spin tip="Creating Note...">
@@ -70,7 +70,7 @@ const CreateNote = () => {
           />
         </Spin>
       )}
-      <h2 className="text-lg text-[#10826E]">Create A New Note</h2>
+      <h2 className="text-xl text-[#10826E] pb-6">Create A New Note</h2>
       <Form
         {...layout}
         name="complex-form"
