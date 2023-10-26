@@ -28,6 +28,8 @@ const CreateNote = () => {
   const history = useNavigate();
   const [api, contextHolder] = notification.useNotification();
 
+  const [date, setDate] = useState("");
+
   useEffect(() => {
     const fetchNote = async () => {
       try {
@@ -54,12 +56,16 @@ const CreateNote = () => {
     });
   };
 
+  const onChange = (date, dateString) => {
+    setDate(dateString);
+  };
+
   const onFinish = async (values) => {
     console.log("Received values of form: ", values);
 
     try {
       setLoading(true);
-      values["due_date"] = moment(values["due_date"]).format("YYYY-MM-DD");
+      values.due_date = moment(date).format("YYYY-MM-DD");
       const response = await editNoteApi(id, values);
       openNotification(
         "Update Successful!",
@@ -195,7 +201,7 @@ const CreateNote = () => {
               width: "calc(50% - 8px)",
             }}
           >
-            <DatePicker format="YYYY-MM-DD" value={noteData.due_date} />
+            <DatePicker onChange={onChange} format="YYYY-MM-DD" />
           </Form.Item>
         </Form.Item>
         <Form.Item name={"description"}>
